@@ -1,4 +1,5 @@
 <?php
+
 require_once 'config.php';
 require_once 'dbFunctions.php';
 
@@ -11,11 +12,20 @@ $db = connect(
 );
 
 $trains = fetchAll($db, 'trains');
-// print_r($trains);
-// echo 'CHECK3';
-// foreach($trains as $train):
-//     echo $train['name'];
-// endforeach;
+
+// if (!empty($_POST)) {
+//     echo 'Check!\n'
+    // $id = strval(count($trains) + 1);
+    // $name = $_POST['name'];
+    // $query = 'Insert into trains values($id, '$name')';
+    // $res = pg_query($db, $query);
+    // if ($res) {
+    //     echo "Train inserted!\n";
+    // } else {
+    //     echo "An error occurred!\n";
+    // }
+// }
+
 ?>
 
 <!DOCTYPE html>
@@ -47,5 +57,10 @@ $trains = fetchAll($db, 'trains');
                     </tr>
             <?php endif ?>
         </table>
+        <form method="post" action='?'>
+    	    <label for="name">Train Name:</label>
+            <input type="text" name="name" id="name" required>
+            <input type="submit" name="submit" value="Insert">
+        </form>
     </body>
 </html>
