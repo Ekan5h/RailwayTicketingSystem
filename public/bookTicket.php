@@ -10,14 +10,14 @@ $db = connect(
     DB_USERNAME,
     DB_PASSWORD
 );
-
+// echo "TEST2\n";
 if (!empty($_POST)) {
     if(isset($_POST['book2'])){
         $booking_agent = $_GET['booking_agent'];
         $train_id = $_GET['train_id'];
         $date = $_GET['date'];
         $num_seats = $_GET['num_seats'];
-        $coach = $_GET['coach'];
+        $coach = strtoupper($_GET['coach']);
         $query = "select allotK($train_id, '$date', $num_seats, '$coach', $booking_agent, ";
         $names = "ARRAY[";
         $ages = "ARRAY[";
@@ -37,12 +37,18 @@ if (!empty($_POST)) {
             }
         }
         $query .= $names.",".$ages.",".$genders.")";
-        $pnr = pg_query($db, $query);
-        if ($pnr) {
-            // show ticket link
+        // echo $query."\n";
+        $result = pg_query($db, $query);
+        // echo $result."\n";
+        if ($result) {
+            $pnr = pg_fetch_result($result, 0, 0);
+            // print_r($pnr);
+            $loc = "Location: checkpnr.php?pnr=$pnr";
         } else {
             $loc = "Location: failure.php";
         }
+        // echo $loc."\n";
+        // echo $pnr."\n";
         header($loc);
     }
     else{
