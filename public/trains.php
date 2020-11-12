@@ -10,7 +10,6 @@ $db = connect(
     DB_USERNAME,
     DB_PASSWORD
 );
-
 $trains = fetchAll($db, 'trains');
 
 if (!empty($_POST)) {
@@ -19,12 +18,13 @@ if (!empty($_POST)) {
     $query = "Insert into trains values($id, '$name')";
     $res = pg_query($db, $query);
     if ($res) {
-        echo "Train inserted!\n";
+        $success = "1";
     } else {
-        echo "An error occurred!\n";
+        $success = "0";
     }
+    $loc = "Location: trains.php?success=$success";
+    header($loc);
 }
-$trains = fetchAll($db, 'trains');
 
 ?>
 
@@ -48,6 +48,7 @@ $trains = fetchAll($db, 'trains');
                 <tr>
                     <td><?php echo $train['train_id']; ?></td>
                     <td><?php echo $train['name']; ?></td>
+                    <td><a href="addToSched.php?train_id=<?php echo $train['train_id']; ?>&name=<?php echo $train['name']; ?>">Add to schedule</a></td>
                 </tr>
                 <?php endforeach;
 
@@ -62,5 +63,15 @@ $trains = fetchAll($db, 'trains');
             <input type="text" name="name" id="name" required>
             <input type="submit" name="submit" value="Insert">
         </form>
+        <?php
+            if(isset($_GET['success'])){
+                if($_GET['success'] == "1"){
+                    echo "Train inserted!\n";
+                }
+                else{
+                    echo "An error occurred!\n";
+                }
+            }
+        ?>
     </body>
 </html>
