@@ -13,18 +13,18 @@ $db = connect(
 
 $trains = fetchAll($db, 'trains');
 
-// if (!empty($_POST)) {
-//     echo 'Check!\n'
-    // $id = strval(count($trains) + 1);
-    // $name = $_POST['name'];
-    // $query = 'Insert into trains values($id, '$name')';
-    // $res = pg_query($db, $query);
-    // if ($res) {
-    //     echo "Train inserted!\n";
-    // } else {
-    //     echo "An error occurred!\n";
-    // }
-// }
+if (!empty($_POST)) {
+    $id = strval(count($trains) + 1);
+    $name = $_POST['name'];
+    $query = "Insert into trains values($id, '$name')";
+    $res = pg_query($db, $query);
+    if ($res) {
+        echo "Train inserted!\n";
+    } else {
+        echo "An error occurred!\n";
+    }
+}
+$trains = fetchAll($db, 'trains');
 
 ?>
 
