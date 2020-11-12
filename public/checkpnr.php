@@ -1,7 +1,9 @@
 <?php
+session_start();
 
 require_once 'config.php';
 require_once 'dbFunctions.php';
+
 
 $db = connect(
     DB_HOST,
@@ -10,20 +12,41 @@ $db = connect(
     DB_USERNAME,
     DB_PASSWORD
 );
-$pnr = $_GET['pnr'];
-$ticket_table = "ticket_$pnr";
-$passengers = fetchAll($db, $ticket_table);
 
+if(isset($_GET['pnr'])){
+    $pnr = $_GET['pnr'];
+    $ticket_table = "ticket_$pnr";
+    $passengers = fetchAll($db, $ticket_table);
+}
 ?>
 
 <!DOCTYPE html>
     <head>
         <title>Check PNR</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+        <link rel = "stylesheet" href = "css/main.css">
     </head>
     <body>
+        <img src="img/trainO.png" id="train" style="transform: scaleX(-1); left: auto; right: -5vh;">
+        <?php if(!empty($_SESSION['email'])): ?>
+        <nav>
+            <div id="profile"></div>
+            <center>Hi, <?php echo $_SESSION['name'] ?>!</center><br>
+            <ul>
+                <li><a href="#">PAST TICKETS</a></li>
+                <li><a href="checkpnr.php">CHECK PNR</a></li>
+                <li><a href="logout.php">LOGOUT</a></li>
+            </ul>
+        </nav>
+        <div id="content">
+        <?php endif; ?>
+        <?php if(isset($_GET['pnr'])): ?>
         <h2>Ticket for PNR <?php echo $_GET['pnr']; ?></h2>
-        <table>
+        <center>
+        <table cellspacing="0px">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -49,8 +72,20 @@ $passengers = fetchAll($db, $ticket_table);
                     <tr>
                         <td colspan="5">Couldn't find your ticket!</td>
                     </tr>
-            <?php endif ?>
+        <?php endif; ?>
         </table>
+        <a href="checkpnr.php">Cancel</a>
+        </center>
+        <?php else: ?>
+            <form action="" method="get">
+            <input type="text" id="username" name="pnr" placeholder="Enter PNR" style="margin-top:50vh; transform: translate(-50%,-50%);">
+            <center>
+                <input type="submit" value="CHECK"><a href="agent.php">Cancel</a>
         
+            </center>
+            </form>
+        <?php endif; ?>
+            
+        </div>
     </body>
 </html>

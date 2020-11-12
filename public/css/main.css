@@ -6,11 +6,54 @@ body, html{
     font-family: 'Roboto', sans-serif;
 }
 
+h2{
+    margin-left: 30px;
+    font-size: 30px;
+}
+h3{
+    margin-left: 40px;
+    font-size: 20px;
+}
+h3 b{
+    color: orangered;
+}
+
+input[type="text"], input[type="number"], select{
+    background-color: rgb(46, 46, 46);
+    border: solid 1px orangered;
+    padding: 5px;
+    border-radius: 10px;
+    margin: 5px;
+    outline: none;
+    color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 100px;
+}
+
+#content a,input[type="submit"]{
+    background: orangered;
+    text-decoration: none;
+    color: white;
+    border: none;
+    outline:none;
+    padding: 5px;
+    margin-left: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+form{
+    margin-bottom: 20px;
+}
+
 #logo {
     display: block;
     height: 70px;
     width: 100px;
-    margin-top: 70px;
+    margin-top: 50px;
     margin-left: 50%;
     margin-bottom: 70px;
     border: solid 4px orangered;
@@ -28,14 +71,16 @@ body, html{
     bottom: 0px;
     opacity: 0.1;
     height: 92vh;
+    pointer-events: none;
     -webkit-filter: blur(2px);
 }
 
-#username, #password{
+#username, #password, #name, #email{
     background-color: rgba(46, 46, 46, 0);
     padding: 5px;
     outline: none;
     max-width: 375px;
+    border-radius: 0px;
     text-decoration: none;
     color:  rgb(185, 185, 185);
     border-width: 0px 0px 3px 0px;
@@ -291,4 +336,24 @@ nav ul li a{
 .book:hover{
     transition: 0.2s;
     background-color: rgb(197, 53, 0);
+}
+
+table{
+    width: 60vw;
+    border: solid 1px orangered;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+th{
+    background-color: orangered;
+    color: white;
+    padding-top: 10px;
+    padding-bottom: 10px; 
+}
+td{
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;   
 }

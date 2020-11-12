@@ -1,7 +1,12 @@
 <?php
-
+session_start();
 require_once 'config.php';
 require_once 'dbFunctions.php';
+
+if(empty($_SESSION['email'])){
+    header("Location: index.php", TRUE, 301);
+    exit();
+}
 
 $db = connect(
     DB_HOST,
@@ -13,12 +18,12 @@ $db = connect(
 // echo "TEST2\n";
 if (!empty($_POST)) {
     if(isset($_POST['book2'])){
-        $booking_agent = $_GET['booking_agent'];
+        $booking_agent = $_SESSION['email'];
         $train_id = $_GET['train_id'];
         $date = $_GET['date'];
         $num_seats = $_GET['num_seats'];
         $coach = strtoupper($_GET['coach']);
-        $query = "select allotK($train_id, '$date', $num_seats, '$coach', $booking_agent, ";
+        $query = "select allotK($train_id, '$date', $num_seats, '$coach', '$booking_agent', ";
         $names = "ARRAY[";
         $ages = "ARRAY[";
         $genders = "ARRAY[";
@@ -40,6 +45,7 @@ if (!empty($_POST)) {
         // echo $query."\n";
         $result = pg_query($db, $query);
         // echo $result."\n";
+        // exit();
         if ($result) {
             $pnr = pg_fetch_result($result, 0, 0);
             // print_r($pnr);
@@ -52,12 +58,12 @@ if (!empty($_POST)) {
         header($loc);
     }
     else{
-        $booking_agent = $_GET['booking_agent'];
+        $booking_agent = $_SESSION['email'];
         $train_id = $_GET['train_id'];
         $date = $_GET['date'];
         $num_seats = $_POST['num_seats'];
         $coach = $_POST['coach'];
-        $loc = "Location: bookTicket.php?booking_agent=$booking_agent&train_id=$train_id&date=$date&num_seats=$num_seats&coach=$coach";
+        $loc = "Location: bookTicket.php?train_id=$train_id&date=$date&num_seats=$num_seats&coach=$coach";
         header($loc);
     }
 }
@@ -67,13 +73,28 @@ if (!empty($_POST)) {
 
 <!DOCTYPE html>
     <head>
-        <title>Book ticket</title>
+        <title>Book a ticket</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+        <link rel = "stylesheet" href = "css/main.css">
     </head>
     <body>
+        <img src="img/trainO.png" id="train" style="transform: scaleX(-1); left: auto; right: -5vh;">
+        <nav>
+            <div id="profile"></div>
+            <center>Hi, <?php echo $_SESSION['name'] ?>!</center><br>
+            <ul>
+                <li><a href="#">PAST TICKETS</a></li>
+                <li><a href="#">CHECK PNR</a></li>
+                <li><a href="logout.php">LOGOUT</a></li>
+            </ul>
+        </nav>
+        <div id="content">
         <h2>Book a ticket</h2>
-        <h3>Booking agent <?php echo $_GET['booking_agent']; ?></h3>
-        <h3>For train ID = <?php echo $_GET['train_id']; ?>, date =  <?php echo $_GET['date']; ?></h3>
+        <h3>Booking by <b><?php echo $_SESSION['email']; ?></b> for train# <b><?php echo sprintf("%06d",$_GET['train_id']); ?></b> on  <b><?php echo $_GET['date']; ?></b></h3>
+        <center>
         <?php 
             if(!isset($_GET['num_seats'])){ ?>
                 <form method="post" action=''>
@@ -81,10 +102,10 @@ if (!empty($_POST)) {
                     <input type="number" id="num_seats" name="num_seats" min="1" max="999">
                     <label for="coach">Coach:</label>
                     <select name="coach" id="coach">
-                        <option value="ac">AC</option>
-                        <option value="sl">SL</option>
+                        <option value="AC">AC</option>
+                        <option value="SL">SL</option>
                     </select>
-                    <input type="submit" name="book1" value="Book">
+                    <input type="submit" name="book1" value="Continue"><a href="agent.php">Cancel</a>
                 </form>
         <?php }  else { ?>
             
@@ -106,10 +127,12 @@ if (!empty($_POST)) {
                     <br>
             
                 <?php } ?>
-                <input type="submit" name="book2" value="Book">
+                <br>
+                <input type="submit" name="book2" value="Book"><a href="agent.php">Cancel</a>
             </form>
         <?php } ?>
-
-
+        </center>
+        <div>
+        
     </body>
 </html>

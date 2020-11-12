@@ -1,5 +1,5 @@
 <?php
-
+session_start();    
 require_once 'config.php';
 require_once 'dbFunctions.php';
 
@@ -10,13 +10,19 @@ $db = connect(
     DB_USERNAME,
     DB_PASSWORD
 );
+
+if(empty($_SESSION['email'])){
+    header("Location: index.php", TRUE, 301);
+    exit();
+}
+
 if(!empty($_GET['s'])){
     if(is_numeric($_GET['s']))
-        $query = "SELECT name, train_id, date, empty_seats(train_id, date) as empty_seats, total_seats(train_id, date) as total_seats FROM train_sched NATURAL JOIN trains WHERE date > now()::date AND train_id=".$_GET['s'].";";
+        $query = "SELECT name, train_id, date, empty_seats(train_id, date) as empty_seats, total_seats(train_id, date) as total_seats FROM train_sched NATURAL JOIN trains WHERE date > now()::date AND train_id=".$_GET['s']." limit 10;";
     else
-        $query = "SELECT name, train_id, date, empty_seats(train_id, date) as empty_seats, total_seats(train_id, date) as total_seats FROM train_sched NATURAL JOIN trains WHERE date > now()::date AND lower(name) Like '%".strtolower($_GET['s'])."%';";
+        $query = "SELECT name, train_id, date, empty_seats(train_id, date) as empty_seats, total_seats(train_id, date) as total_seats FROM train_sched NATURAL JOIN trains WHERE date > now()::date AND lower(name) Like '%".strtolower($_GET['s'])."%' limit 10;";
 }else{
-    $query = "SELECT name, train_id, date, empty_seats(train_id, date) as empty_seats, total_seats(train_id, date) as total_seats FROM train_sched NATURAL JOIN trains WHERE date > now()::date;";
+    $query = "SELECT name, train_id, date, empty_seats(train_id, date) as empty_seats, total_seats(train_id, date) as total_seats FROM train_sched NATURAL JOIN trains WHERE date > now()::date limit 10;";
 }
 $result = pg_query($db, $query);
 $trains = pg_fetch_all($result);
@@ -33,11 +39,11 @@ $trains = pg_fetch_all($result);
         <img src="img/trainO.png" id="train" style="transform: scaleX(-1); left: auto; right: -5vh;">
         <nav>
             <div id="profile"></div>
-            <center>Agent #ID</center><br>
+            <center>Hi, <?php echo $_SESSION['name'] ?>!</center><br>
             <ul>
                 <li><a href="#">PAST TICKETS</a></li>
-                <li><a href="#">CHECK PNR</a></li>
-                <li><a href="#">LOGOUT</a></li>
+                <li><a href="checkpnr.php">CHECK PNR</a></li>
+                <li><a href="logout.php">LOGOUT</a></li>
             </ul>
         </nav>
         <div id="content">
@@ -54,7 +60,7 @@ $trains = pg_fetch_all($result);
                     <div class="train-id"><?php echo sprintf('%06d', $train['train_id']); ?></div>
                     <div class="date"><?php echo $train['date']; ?></div>
                     <div class="booked">Available: <?php echo $train['empty_seats']; ?> / <?php echo $train['total_seats']; ?></div>
-                    <div class="book">BOOK</div>
+                    <div class="book" onclick="window.location.href = 'bookTicket.php?train_id=<?php echo $train['train_id']; ?>&date=<?php echo $train['date']; ?>';">BOOK</div>
                 </div>
                 <?php endforeach;
 

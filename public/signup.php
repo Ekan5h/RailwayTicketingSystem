@@ -10,29 +10,22 @@ $db = connect(
     DB_USERNAME,
     DB_PASSWORD
 );
-if(!empty($_SESSION['email'])){
-    header("Location: agent.php", TRUE, 301);
-    exit();
-}
-
 if(!empty($_POST)){
     try{
-        $id = $_POST['usr'];
-        $password = $_POST['pass'];
-        $query = "SELECT name FROM booking_agents WHERE email = '$id' AND password = '$password'";
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $query = "INSERT INTO booking_agents(name, email, password) VALUES('$name', '$email', '$password')";
         $result = pg_query($db, $query);
-        $result = pg_fetch_row($result);
-        if($result){
-            $_SESSION['name'] = $result[0];
-            $_SESSION['email'] = $id;
-            header("Location: agent.php", TRUE, 301);
+        if(!$result){
+            header("Location: signup.php?msg=Email already exists!", TRUE, 301);
             exit();
         }else{
-            header("Location: index.php?msg=Invalid credentials!", TRUE, 301);
+            header("Location: index.php", TRUE, 301);
             exit();
         }
     }catch(exception $e){
-        header("Location: index.php?msg=Some error occurred!", TRUE, 301);
+        header("Location: signup.php?msg=Some error occurred!", TRUE, 301);
         exit();
     }
 }
@@ -58,12 +51,14 @@ if(!empty($_POST)){
             ?>
             </font>
         </center>
-        <form action="index.php" method="POST">
-            <input name="usr" type="email" id="username" placeholder="Email ID">
-            <input name="pass" type="password" id="password" placeholder="Password">
-            <input type="submit" id="loginbtn" value="LOGIN">
+        <form action="signup.php" method="POST">
+            <input type="text" name = "name" id="name" placeholder="Full Name" required>
+            <input type="email" name="email" id="email" placeholder="Email ID" required>
+            <input type="password" name="password" id="password" placeholder="Password" required>
+            <input type="submit" id="loginbtn" value="SIGNUP">
         </form>
-        <center>Not a member? <a href="signup.php" style="color: orangered;">Signup</a><center>
+        <center>Already a member? <a href="index.php" style="color: orangered;">Login</a><center>
+
         <a href="#" id="admlgin">Admin Login</a>
     </body>
 </html>
