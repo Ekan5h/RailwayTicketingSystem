@@ -17,6 +17,18 @@ if(isset($_GET['pnr'])){
     $pnr = $_GET['pnr'];
     $ticket_table = "ticket_$pnr";
     $passengers = fetchAll($db, $ticket_table);
+    $query = "select getTrainDetails($pnr)";
+    $result = pg_query($db, $query);
+    if($result){
+        $row = pg_fetch_all($result);
+        $row = $row[0]['gettraindetails'];
+        list($first, $second) = explode(",", $row);
+        $train_id = substr($first, 1); 
+        $date = substr($second, 0, -1);
+        // print_r($row);
+    }
+    
+    
 }
 ?>
 
@@ -45,6 +57,7 @@ if(isset($_GET['pnr'])){
         <?php endif; ?>
         <?php if(isset($_GET['pnr'])): ?>
         <h2>Ticket for PNR <?php echo $_GET['pnr']; ?></h2>
+        <h3>Train ID = <?php echo $train_id; ?> on date = <?php echo $date; ?></h3>
         <center>
         <table cellspacing="0px">
             <thead>
