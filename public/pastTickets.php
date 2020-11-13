@@ -14,8 +14,8 @@ $trains = fetchAll($db, 'trains');
 
 if(isset($_GET['email'])){
     $booking_agent = $_GET['email'];
-    $booking_agent = str_replace("@", "", $booking_agent);
-    $booking_agent = str_replace(".", "", $booking_agent);
+    $booking_agent = str_replace("@", "_", $booking_agent);
+    $booking_agent = str_replace(".", "_", $booking_agent);
     $table_name = "past_bookings_$booking_agent";
     $tickets = fetchAll($db, $table_name);
 }
