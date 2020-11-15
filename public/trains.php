@@ -17,7 +17,7 @@ $trains = fetchAll($db, 'trains');
 
 if (!empty($_POST)) {
     $name = $_POST['name'];
-    $query = "Insert into trains(name) values('$name')";
+    $query = "Insert into trains(name, created_on) values('$name', now())";
     $res = pg_query($db, $query);
     if ($res) {
         $success = "1";
@@ -41,7 +41,7 @@ if (!empty($_POST)) {
     <body>
         <img src="img/trainO.png" id="train">
         <center>
-        <h2>Schedule a Train</h2>
+        <h2>Schedule a TrainA</h2>
         <?php
             if(isset($_GET['success'])){
                 if($_GET['success'] == "1"){
