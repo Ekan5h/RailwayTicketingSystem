@@ -18,7 +18,7 @@ h3 b{
     color: orangered;
 }
 
-input[type="text"], input[type="number"], select{
+input[type="date"], input[type="text"], input[type="number"], select{
     background-color: rgb(46, 46, 46);
     border: solid 1px orangered;
     padding: 5px;
@@ -31,7 +31,7 @@ input[type="text"], input[type="number"], select{
     min-width: 100px;
 }
 
-#content a,input[type="submit"]{
+#content a, .btn, input[type="submit"]{
     background: orangered;
     text-decoration: none;
     color: white;
@@ -121,10 +121,16 @@ form{
     position: fixed;
     left: 50%;
     bottom: 20px;
-    color: orangered;
+    color: white;
     text-decoration: none;
     font-size: 20px;
     transform: translate(-50%, 0%);
+}
+
+#admlgin a{
+    color: orangered;
+    text-decoration: none;
+    font-size: 20px;
 }
 
 nav{
@@ -287,7 +293,7 @@ nav ul li a{
     left: 20px;
     font-size: 30px;
     max-width: 33%;
-    max-height: 30px;
+    max-height: 35px;
     word-break: break-all;
     overflow: hidden;
 }

@@ -20,6 +20,7 @@ if(!empty($_GET['s'])){
     if(is_numeric($_GET['s']))
         $query = "SELECT name, train_id, date, empty_seats(train_id, date) as empty_seats, total_seats(train_id, date) as total_seats FROM train_sched NATURAL JOIN trains WHERE date > now()::date AND train_id=".$_GET['s']." limit 10;";
     else
+        $_GET['s'] = BlockSQLInjection($_GET['s']);
         $query = "SELECT name, train_id, date, empty_seats(train_id, date) as empty_seats, total_seats(train_id, date) as total_seats FROM train_sched NATURAL JOIN trains WHERE date > now()::date AND lower(name) Like '%".strtolower($_GET['s'])."%' limit 10;";
 }else{
     $query = "SELECT name, train_id, date, empty_seats(train_id, date) as empty_seats, total_seats(train_id, date) as total_seats FROM train_sched NATURAL JOIN trains WHERE date > now()::date limit 10;";
@@ -37,15 +38,7 @@ $trains = pg_fetch_all($result);
     </head>
     <body>
         <img src="img/trainO.png" id="train" style="transform: scaleX(-1); left: auto; right: -5vh;">
-        <nav>
-            <div id="profile"></div>
-            <center>Hi, <?php echo $_SESSION['name'] ?>!</center><br>
-            <ul>
-                <li><a href="#">PAST TICKETS</a></li>
-                <li><a href="checkpnr.php">CHECK PNR</a></li>
-                <li><a href="logout.php">LOGOUT</a></li>
-            </ul>
-        </nav>
+        <?php require_once 'nav.php'; ?>
         <div id="content">
             <center>
                 <form action="agent.php" method="get">

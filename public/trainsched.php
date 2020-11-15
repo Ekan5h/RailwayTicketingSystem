@@ -13,21 +13,9 @@ $db = connect(
     DB_USERNAME,
     DB_PASSWORD
 );
-$trains = fetchAll($db, 'trains');
-
-if (!empty($_POST)) {
-    $name = $_POST['name'];
-    $query = "Insert into trains(name) values('$name')";
-    $res = pg_query($db, $query);
-    if ($res) {
-        $success = "1";
-    } else {
-        $success = "0";
-    }
-    $loc = "Location: trains.php?success=$success";
-    header($loc);
-}
-
+$query = "SELECT *, empty_seats(train_id, date) as empty_seats, total_seats(train_id, date) as total_seats FROM train_sched NATURAL JOIN trains";
+$result = pg_query($db, $query);
+$trains = pg_fetch_all($result);
 ?>
 
 <!DOCTYPE html>
@@ -41,23 +29,16 @@ if (!empty($_POST)) {
     <body>
         <img src="img/trainO.png" id="train">
         <center>
-        <h2>Schedule a Train</h2>
-        <?php
-            if(isset($_GET['success'])){
-                if($_GET['success'] == "1"){
-                    echo "Train inserted!\n";
-                }
-                else{
-                    echo "An error occurred!\n";
-                }
-            }
-        ?>
+        <h2>Train Schedule</h2>
         <table cellspacing=0>
             <thead>
                 <tr>
                     <th>Train ID</th>
                     <th>Name</th>
-                    <th></th>
+                    <th>Date</th>
+                    <th>AC Coaches</th>
+                    <th>SL Coaches</th>
+                    <th>Availability</th>
                 </tr>
             </thead>
             <?php
@@ -66,25 +47,21 @@ if (!empty($_POST)) {
                 <tr>
                     <td><?php echo sprintf("%06d",$train['train_id']); ?></td>
                     <td><?php echo $train['name']; ?></td>
-                    <td><a class='btn' href="addToSched.php?train_id=<?php echo $train['train_id']; ?>&name=<?php echo $train['name']; ?>">Add to schedule</a></td>
+                    <td><?php echo $train['date']; ?></td>
+                    <td><?php echo $train['num_ac']; ?></td>
+                    <td><?php echo $train['num_sl']; ?></td>
+                    <td><?php echo $train['empty_seats']; ?> / <?php echo $train['total_seats']; ?></td>
                 </tr>
                 <?php endforeach;
 
                 else: ?>
                     <tr>
-                        <td colspan="2">No trains listed!</td>
+                        <td colspan="6">No trains listed!</td>
                     </tr>
             <?php endif ?>
         </table>
+        <a class="btn" href="trains.php">Schedule a new train</a><br><br><br>
+        <a class="btn" href="logout.php">Logout</a>
         </center>
-        <form method="post" action='?'>
-            <input type="text" name="name" id="name" placeholder="New Train Name" required>
-            <br>
-            <center>
-            <input type="submit" name="submit" value="Insert New Train">
-            
-        </form>
-        <a class="btn" href="trainsched.php">Back</a>
-
     </body>
 </html>

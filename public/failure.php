@@ -17,15 +17,7 @@ require_once 'dbFunctions.php';
     <body>
         <img src="img/trainO.png" id="train" style="transform: scaleX(-1); left: auto; right: -5vh;">
         <?php if(!empty($_SESSION['email'])): ?>
-        <nav>
-            <div id="profile"></div>
-            <center>Hi, <?php echo $_SESSION['name'] ?>!</center><br>
-            <ul>
-                <li><a href="#">PAST TICKETS</a></li>
-                <li><a href="checkpnr.php">CHECK PNR</a></li>
-                <li><a href="logout.php">LOGOUT</a></li>
-            </ul>
-        </nav>
+        <?php require_once 'nav.php'; ?>
         <div id="content">
         <?php endif; ?>
         <center>

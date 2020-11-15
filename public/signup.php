@@ -12,9 +12,9 @@ $db = connect(
 );
 if(!empty($_POST)){
     try{
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+        $name = BlockSQLInjection($_POST['name']);
+        $email = BlockSQLInjection($_POST['email']);
+        $password = BlockSQLInjection($_POST['password']);
         $query = "INSERT INTO booking_agents(name, email, password) VALUES('$name', '$email', '$password')";
         $result = pg_query($db, $query);
         if(!$result){
@@ -59,6 +59,8 @@ if(!empty($_POST)){
         </form>
         <center>Already a member? <a href="index.php" style="color: orangered;">Login</a><center>
 
-        <a href="#" id="admlgin">Admin Login</a>
+        <div id="admlgin">
+            <a href="admlogin.php">Admin Login</a> | <a href="checkpnr.php">Check PNR</a>
+        </div>
     </body>
 </html>

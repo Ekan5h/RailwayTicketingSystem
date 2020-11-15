@@ -19,18 +19,18 @@ $db = connect(
 if (!empty($_POST)) {
     if(isset($_POST['book2'])){
         $booking_agent = $_SESSION['email'];
-        $train_id = $_GET['train_id'];
-        $date = $_GET['date'];
-        $num_seats = $_GET['num_seats'];
-        $coach = strtoupper($_GET['coach']);
+        $train_id = BlockSQLInjection($_GET['train_id']);
+        $date = BlockSQLInjection($_GET['date']);
+        $num_seats = BlockSQLInjection($_GET['num_seats']);
+        $coach = BlockSQLInjection(strtoupper($_GET['coach']));
         $query = "select allotK($train_id, '$date', $num_seats, '$coach', '$booking_agent', ";
         $names = "ARRAY[";
         $ages = "ARRAY[";
         $genders = "ARRAY[";
         for($j = 1; $j <= intval($num_seats); $j++) {
-            $names .= "'".$_POST['name'.strval($j)]."'";
-            $ages .= $_POST['age'.strval($j)];
-            $genders .= "'".$_POST['gender'.strval($j)]."'";
+            $names .= "'".BlockSQLInjection($_POST['name'.strval($j)])."'";
+            $ages .= BlockSQLInjection($_POST['age'.strval($j)]);
+            $genders .= "'".BlockSQLInjection($_POST['gender'.strval($j)])."'";
             if($j == intval($num_seats)){
                 $names .= "]";
                 $ages .= "]";
@@ -82,18 +82,10 @@ if (!empty($_POST)) {
     </head>
     <body>
         <img src="img/trainO.png" id="train" style="transform: scaleX(-1); left: auto; right: -5vh;">
-        <nav>
-            <div id="profile"></div>
-            <center>Hi, <?php echo $_SESSION['name'] ?>!</center><br>
-            <ul>
-                <li><a href="#">PAST TICKETS</a></li>
-                <li><a href="#">CHECK PNR</a></li>
-                <li><a href="logout.php">LOGOUT</a></li>
-            </ul>
-        </nav>
+        <?php require_once 'nav.php'; ?>
         <div id="content">
         <h2>Book a ticket</h2>
-        <h3>Booking by <b><?php echo $_SESSION['email']; ?></b> for train# <b><?php echo sprintf("%06d",$_GET['train_id']); ?></b> on  <b><?php echo $_GET['date']; ?></b></h3>
+        <h3>Booking by <b><?php echo $_SESSION['email']; ?></b> for train #<b><?php echo sprintf("%06d",$_GET['train_id']); ?></b> on  <b><?php echo $_GET['date']; ?></b></h3>
         <center>
         <?php 
             if(!isset($_GET['num_seats'])){ ?>
@@ -109,7 +101,7 @@ if (!empty($_POST)) {
                 </form>
         <?php }  else { ?>
             
-            <h3>Number of seats = <?php echo $_GET['num_seats']; ?>, coach =  <?php echo $_GET['coach']; ?></h3>
+            <h3><?php echo $_GET['num_seats']; ?> berths in <?php echo $_GET['coach']; ?> class coming right up...</h3>
             <form method="post" action=''>
             <?php
                 for ($i = 1; $i <= intval($_GET['num_seats']); $i++) { ?>
@@ -120,9 +112,9 @@ if (!empty($_POST)) {
                     <input type="number" id="age<?php echo $i; ?>" name="age<?php echo $i; ?>" min="1" max="99">
                     <label for="gender<?php echo $i; ?>">Gender</label>
                     <select name="gender<?php echo $i; ?>" id="gender<?php echo $i; ?>">
-                        <option value="m">Male</option>
-                        <option value="f">Female</option>
-                        <option value="n">Non-binary</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                        <option value="N">Non-binary</option>
                     </select>
                     <br>
             

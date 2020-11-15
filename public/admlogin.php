@@ -10,29 +10,24 @@ $db = connect(
     DB_USERNAME,
     DB_PASSWORD
 );
-if(!empty($_SESSION['email'])){
-    header("Location: agent.php", TRUE, 301);
+if(!empty($_SESSION['admin'])){
+    header("Location: trainsched.php", TRUE, 301);
     exit();
 }
 
 if(!empty($_POST)){
     try{
-        $id = BlockSQLInjection($_POST['usr']);
         $password = BlockSQLInjection($_POST['pass']);
-        $query = "SELECT name FROM booking_agents WHERE email = '$id' AND password = '$password'";
-        $result = pg_query($db, $query);
-        $result = pg_fetch_row($result);
-        if($result){
-            $_SESSION['name'] = $result[0];
-            $_SESSION['email'] = $id;
-            header("Location: agent.php", TRUE, 301);
+        if($password=="1234"){
+            $_SESSION['admin'] = 1;
+            header("Location: trainsched.php", TRUE, 301);
             exit();
         }else{
-            header("Location: index.php?msg=Invalid credentials!", TRUE, 301);
+            header("Location: admlogin.php?msg=Invalid credentials!", TRUE, 301);
             exit();
         }
     }catch(exception $e){
-        header("Location: index.php?msg=Some error occurred!", TRUE, 301);
+        header("Location: admlogin.php?msg=Some error occurred!", TRUE, 301);
         exit();
     }
 }
@@ -58,14 +53,9 @@ if(!empty($_POST)){
             ?>
             </font>
         </center>
-        <form action="index.php" method="POST">
-            <input name="usr" type="email" id="username" placeholder="Email ID">
+        <form action="admlogin.php" method="POST">
             <input name="pass" type="password" id="password" placeholder="Password">
             <input type="submit" id="loginbtn" value="LOGIN">
         </form>
-        <center>Not a member? <a href="signup.php" style="color: orangered;">Signup</a><center>
-        <div id="admlgin">
-            <a href="admlogin.php">Admin Login</a> | <a href="checkpnr.php">Check PNR</a>
-        </div>
     </body>
 </html>

@@ -14,7 +14,7 @@ $db = connect(
 );
 
 if(isset($_GET['pnr'])){
-    $pnr = $_GET['pnr'];
+    $pnr = BlockSQLInjection($_GET['pnr']);
     $ticket_table = "ticket_$pnr";
     $passengers = fetchAll($db, $ticket_table);
     $query = "select getTrainDetails($pnr)";
@@ -44,21 +44,13 @@ if(isset($_GET['pnr'])){
     <body>
         <img src="img/trainO.png" id="train" style="transform: scaleX(-1); left: auto; right: -5vh;">
         <?php if(!empty($_SESSION['email'])): ?>
-        <nav>
-            <div id="profile"></div>
-            <center>Hi, <?php echo $_SESSION['name'] ?>!</center><br>
-            <ul>
-                <li><a href="#">PAST TICKETS</a></li>
-                <li><a href="checkpnr.php">CHECK PNR</a></li>
-                <li><a href="logout.php">LOGOUT</a></li>
-            </ul>
-        </nav>
+        <?php require_once 'nav.php'; ?>
         <div id="content">
         <?php endif; ?>
         <?php if(isset($_GET['pnr'])): ?>
         <h2>Ticket for PNR <?php echo $_GET['pnr']; ?></h2>
-        <h3>Train ID = <?php echo $train_id; ?> on date = <?php echo $date; ?></h3>
         <center>
+        <h3>Booking for Train #<b><?php echo sprintf("%06d",$train_id); ?></b> on <b><?php echo $date; ?></b></h3>
         <table cellspacing="0px">
             <thead>
                 <tr>
@@ -70,7 +62,7 @@ if(isset($_GET['pnr'])){
                 </tr>
             </thead>
             <?php
-            if(count($passengers) > 0):
+            if($passengers):
                 foreach($passengers as $passenger): ?>
                 <tr>
                     <td><?php echo $passenger['name']; ?></td>
@@ -87,13 +79,13 @@ if(isset($_GET['pnr'])){
                     </tr>
         <?php endif; ?>
         </table>
-        <a href="checkpnr.php">Cancel</a>
+        <a href="checkpnr.php">Check Another PNR</a>
         </center>
         <?php else: ?>
             <form action="" method="get">
             <input type="text" id="username" name="pnr" placeholder="Enter PNR" style="margin-top:50vh; transform: translate(-50%,-50%);">
             <center>
-                <input type="submit" value="CHECK"><a href="agent.php">Cancel</a>
+                <input type="submit" value="CHECK"><a class="btn" href="agent.php">CANCEL</a>
         
             </center>
             </form>
