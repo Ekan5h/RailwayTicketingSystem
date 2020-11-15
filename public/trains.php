@@ -41,7 +41,7 @@ if (!empty($_POST)) {
     <body>
         <img src="img/trainO.png" id="train">
         <center>
-        <h2>Schedule a TrainA</h2>
+        <h2>Schedule a Train</h2>
         <?php
             if(isset($_GET['success'])){
                 if($_GET['success'] == "1"){

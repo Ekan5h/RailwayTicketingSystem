@@ -13,16 +13,17 @@ if (!empty($_POST)) {
     $date = $_POST['date'];
     $num_ac = $_POST['num_ac'];
     $num_sl = $_POST['num_sl'];
-    $query = "Insert into train_sched values($train_id, '$date', $num_ac, $num_sl, now())";
-    echo $query;
-    $res = pg_query($db, $query);
-    if ($res) {
-        $success = "1";
-    } else {
-        $success = "0";
+    if(!isset(_GET['success'])){
+        $query = "Insert into train_sched values($train_id, '$date', $num_ac, $num_sl, now())";
+        $res = pg_query($db, $query);
+        if ($res) {
+            $success = "1";
+        } else {
+            $success = "0";
+        }
+        $loc = "Location: addToSched.php?success=$success&train_id=$train_id&name=$name";
+        header($loc);
     }
-    $loc = "Location: addToSched.php?success=$success&train_id=$train_id&name=$name";
-    header($loc);
 }
 
 ?>
