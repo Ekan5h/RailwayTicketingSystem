@@ -109,7 +109,7 @@ if (!empty($_POST)) {
                     <label for="name<?php echo $i; ?>">Name:</label>
                     <input type="text" name="name<?php echo $i; ?>" id="name<?php echo $i; ?>" required>
                     <label for="age<?php echo $i; ?>">Age</label>
-                    <input type="number" id="age<?php echo $i; ?>" name="age<?php echo $i; ?>" min="1" max="99">
+                    <input type="number" id="age<?php echo $i; ?>" name="age<?php echo $i; ?>" min="1" max="99" required>
                     <label for="gender<?php echo $i; ?>">Gender</label>
                     <select name="gender<?php echo $i; ?>" id="gender<?php echo $i; ?>">
                         <option value="M">Male</option>

@@ -44,11 +44,11 @@ if (!empty($_POST)) {
         <h3>Schedule train <b><?php echo $_GET['name']; ?></b>, ID = <b><?php echo sprintf("%06d",$_GET['train_id']); ?></b></h3>
         <form method="post" action=''>
             <label for="date">Date:</label>
-            <input type="date" id="date" name="date">
+            <input type="date" id="date" name="date" required>
             <label for="num_ac">AC coaches:</label>
-            <input type="number" id="num_ac" name="num_ac" min="1" max="999">
+            <input type="number" id="num_ac" name="num_ac" min="1" max="999" required>
             <label for="num_sl">SL coaches:</label>
-            <input type="number" id="num_sl" name="num_sl" min="1" max="999">
+            <input type="number" id="num_sl" name="num_sl" min="1" max="999" required>
             <br><br>
             <input type="submit" name="submit" value="Schedule">
 
