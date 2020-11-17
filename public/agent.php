@@ -19,9 +19,10 @@ if(empty($_SESSION['email'])){
 if(!empty($_GET['s'])){
     if(is_numeric($_GET['s']))
         $query = "SELECT name, train_id, date, empty_seats(train_id, date) as empty_seats, total_seats(train_id, date) as total_seats FROM train_sched NATURAL JOIN trains WHERE date > now()::date AND train_id=".$_GET['s']." limit 10;";
-    else
+    else{
         $_GET['s'] = BlockSQLInjection($_GET['s']);
         $query = "SELECT name, train_id, date, empty_seats(train_id, date) as empty_seats, total_seats(train_id, date) as total_seats FROM train_sched NATURAL JOIN trains WHERE date > now()::date AND lower(name) Like '%".strtolower($_GET['s'])."%' limit 10;";
+    }
 }else{
     $query = "SELECT name, train_id, date, empty_seats(train_id, date) as empty_seats, total_seats(train_id, date) as total_seats FROM train_sched NATURAL JOIN trains WHERE date > now()::date limit 10;";
 }

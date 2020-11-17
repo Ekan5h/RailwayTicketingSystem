@@ -20,6 +20,6 @@ function BlockSQLInjection($str){
     $str = str_replace("\"", "&dquot;", $str);
     $str = str_replace(",", "&com;", $str);
     $str = str_replace(";", "&semi;", $str);
-    $str = str_replace(" ", "&nbsp;", $str);
+    // $str = str_replace(" ", "&nbsp;", $str);
     return $str;
 }
