@@ -28,6 +28,8 @@ if (!empty($_POST)) {
 
 ?>
 
+
+
 <!DOCTYPE html>
     <head>
         <title>Railway Ticketing System</title>
@@ -46,9 +48,9 @@ if (!empty($_POST)) {
             <label for="date">Date:</label>
             <input type="date" id="date" name="date" required>
             <label for="num_ac">AC coaches:</label>
-            <input type="number" id="num_ac" name="num_ac" min="1" max="999" required>
+            <input type="number" id="num_ac" name="num_ac" min="0" max="999" required>
             <label for="num_sl">SL coaches:</label>
-            <input type="number" id="num_sl" name="num_sl" min="1" max="999" required>
+            <input type="number" id="num_sl" name="num_sl" min="0" max="999" required>
             <br><br>
             <input type="submit" name="submit" value="Schedule">
 
@@ -59,10 +61,11 @@ if (!empty($_POST)) {
                     echo "<font color=\"green\">Train inserted in schedule!</font><br><br>";
                 }
                 else{
-                    echo "<font color=\"red\">An error occurred! Check if the train is not already scheduled.</font><br><br>";
+                    echo "<font color=\"red\">An error occurred! Check the release date or total number of coaches.</font><br><br>";
                 }
             }
         ?>
         <a class="btn" href="trains.php">Back to list of trains</a>
     </body>
 </html>
+
