@@ -15,7 +15,7 @@ $db = connect(
 
 if(isset($_GET['pnr'])){
     $pnr = BlockSQLInjection($_GET['pnr']);
-    $ticket_table = "ticket_$pnr";
+    $ticket_table = "getTicket($pnr)";
     $passengers = fetchAll($db, $ticket_table);
     $query = "select getTrainDetails($pnr)";
     $result = pg_query($db, $query);
@@ -69,7 +69,7 @@ if(isset($_GET['pnr'])){
                     <td><?php echo $passenger['age']; ?></td>
                     <td><?php echo $passenger['gender']; ?></td>
                     <td><?php echo $passenger['coach']; ?></td>
-                    <td><?php echo $passenger['berth']; ?></td>
+                    <td><?php echo $passenger['berth']; ?> (<?php echo $passenger['berth_type']; ?>)</td>
                 </tr>
                 <?php endforeach;
 
